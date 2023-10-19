@@ -5,10 +5,66 @@ description = ""
 authors = ["Aristeu <aristeuneto13@gmail.com>"]
 readme = "README.md"
 
+
 [tool.poetry.dependencies]
 python = "^3.12"
+fastapi = "^0.104.0"
+pydantic = {extras = ["email"], version = "^2.4.2"}
+pydantic-settings = "^2.0.3"
+faker = "^19.11.0"
+httpx = "^0.25.0"
 
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.10.0"
+pytest = "^7.4.2"
+coverage = "^7.3.2"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q"
+testpaths = [
+    "tests"
+]
+
+[tool.coverage.paths]
+source = [
+    "src/"
+]
+
+[tool.coverage.run]
+branch = true
+
+[tool.coverage.report]
+# Regexes for lines to exclude from consideration
+exclude_also = [
+    # Don't complain about missing debug-only code:
+    "def __repr__",
+    "if self\\.debug",
+
+    # Don't complain if tests don't hit defensive assertion code:
+    "raise AssertionError",
+    "raise NotImplementedError",
+
+    # Don't complain if non-runnable code isn't run:
+    "if 0:",
+    "if __name__ == .__main__.:",
+
+    # Don't complain about abstract methods, they aren't run:
+    "@(abc\\.)?abstractmethod",
+
+    # Don't complain about TYPE_CHECKING code, it isn't run:
+    "if TYPE_CHECKING:",
+]
+
+ignore_errors = true
+
+
+[tool.coverage.lcov]
+output = "coverage/lcov.info"
+# use this plugin in vscode to show coverage
+# https://github.com/markis/vscode-code-coverage
