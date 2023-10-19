@@ -41,7 +41,8 @@ def test_generate_second_digit(doc, expected):
         ("949.117.780-00", False),
         ("111.111.111-11", False),
         ("123.A56.789-09", False),
-        ("123.A56.789-090000", False),
+        ("84549854090", True),
+        ("123.56.789-090000", False),
         ("03551921016", True),
     ],
 )

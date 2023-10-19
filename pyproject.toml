@@ -26,10 +26,11 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.pytest.ini_options]
 minversion = "6.0"
-addopts = "-ra -q"
+addopts = "-ra"
 testpaths = [
     "tests"
 ]
+
 
 [tool.coverage.paths]
 source = [
@@ -38,6 +39,12 @@ source = [
 
 [tool.coverage.run]
 branch = true
+source = [
+    "src/"
+]
+omit = [
+    "settings.py"
+]
 
 [tool.coverage.report]
 # Regexes for lines to exclude from consideration
