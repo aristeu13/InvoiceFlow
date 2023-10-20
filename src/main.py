@@ -1,6 +1,25 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.exceptions import RequestValidationError
+import starkbank
+from src.core.settings import settings
+
+from src.core.common.error_handler import request_validation_exception_handler
+
+user = starkbank.Project(
+    environment=settings.SB_ENVIRONMENT,
+    id=settings.SB_PROJECT_ID,
+    private_key=settings.SB_PRIVATE_KEY,
+)
+
+starkbank.user = user
+
 
 app = FastAPI()
+
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    return await request_validation_exception_handler(request=request, exception=exc)
 
 
 @app.get("/health")
