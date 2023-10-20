@@ -53,9 +53,9 @@ def get_payment_repository(
     settings: Settings = Depends(get_settings),
 ) -> PaymentRepositoryI:
     user = starkbank.Project(
-        environment=settings.SB_ENVIRONMENT,
-        id=settings.SB_PROJECT_ID,
-        private_key=settings.SB_PRIVATE_KEY,
+        environment=settings.sb_environment,
+        id=settings.sb_project_id,
+        private_key=settings.sb_private_key,
     )
 
     starkbank.user = user
