@@ -1,0 +1,40 @@
+version: '3'
+services:
+  rabbit:
+    image: rabbitmq:management
+    ports:
+      - "15672:15672"
+  app:
+    build: .
+    ports:
+      - "5000:5000"
+    depends_on:
+      - rabbit
+    environment:
+      - SB_ENVIRONMENT=sandbox
+      - SB_PROJECT_ID=${SB_PROJECT_ID}
+      - SB_PRIVATE_KEY=${SB_PRIVATE_KEY}
+      - BROKER_URL=amqp://guest:guest@rabbit:5672//
+      - INVOICE_START_DATETIME=${INVOICE_START_DATETIME}
+  work:
+    build: .
+    depends_on:
+      - rabbit
+    environment:
+      - SB_ENVIRONMENT=sandbox
+      - SB_PROJECT_ID=${SB_PROJECT_ID}
+      - SB_PRIVATE_KEY=${SB_PRIVATE_KEY}
+      - BROKER_URL=amqp://guest:guest@rabbit:5672//
+      - INVOICE_START_DATETIME=${INVOICE_START_DATETIME}
+    command: celery -A src.work worker --loglevel=info
+  beat:
+    build: .
+    depends_on:
+      - rabbit
+    environment:
+      - SB_ENVIRONMENT=sandbox
+      - SB_PROJECT_ID=${SB_PROJECT_ID}
+      - SB_PRIVATE_KEY=${SB_PRIVATE_KEY}
+      - BROKER_URL=amqp://guest:guest@rabbit:5672//
+      - INVOICE_START_DATETIME=${INVOICE_START_DATETIME}
+    command: celery -A src.work beat --loglevel=info

@@ -53,8 +53,6 @@ COPY poetry.lock pyproject.toml ./
 # install runtime deps - uses $POETRY_VIRTUALENVS_IN_PROJECT internally
 RUN poetry install
 
-RUN pip install gunicorn uvicorn
-
 # `production` image used for runtime
 FROM python-base as production
 ENV FASTAPI_ENV=production
