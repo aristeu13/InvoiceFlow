@@ -1,5 +1,13 @@
 # Invoice Flow
 
+## Official Link
+
+The project is live at [Official Link](https://starkbank-challenge.aristeu.tech/docs).
+
+## Hosting
+
+The project is hosted on AWS (Amazon Web Services).
+
 ## Introduction
 
 This project is designed to create the flow of invoices. Below are the commands you'll need to get started with development, testing, and running the application.
