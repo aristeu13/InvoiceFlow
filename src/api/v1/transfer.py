@@ -1,10 +1,10 @@
-from fastapi import APIRouter, Body
-import starkbank
+from fastapi import APIRouter, Body, Depends
 
 from src.domains.payment_processing import (
     STARK_BANK_ACCOUNT,
     PaymentProcessing,
 )
+from src.repository.payment_repository import PaymentRepositoryI, get_payment_repository
 
 
 router = APIRouter()
@@ -13,6 +13,7 @@ router = APIRouter()
 @router.post("/transfer")
 async def transfer(
     data: dict = Body(),
+    sb: PaymentRepositoryI = Depends(get_payment_repository),
 ):
     amount = data.get("event", {}).get("log", {}).get("invoice", {}).get("amount", None)
     fee = data.get("event", {}).get("log", {}).get("invoice", {}).get("fee", None)
@@ -25,17 +26,6 @@ async def transfer(
         fee=fee,
     )
 
-    starkbank.transfer.create(
-        [
-            starkbank.Transfer(
-                amount=payment.net_value,
-                name=payment.account.name,
-                tax_id=payment.account.tax_id,
-                bank_code=payment.account.bank_code,
-                branch_code=payment.account.branch,
-                account_number=payment.account.account_number,
-                account_type=payment.account.account_type,
-            )
-        ]
-    )
+    sb.transfer(payment=payment)
+
     return 200
