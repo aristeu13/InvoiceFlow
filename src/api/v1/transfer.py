@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Body, Depends
+from fastapi import APIRouter, Body, Depends, HTTPException
 
 from src.domains.payment_processing import (
     STARK_BANK_ACCOUNT,
@@ -10,7 +10,7 @@ from src.repository.payment_repository import PaymentRepositoryI, get_payment_re
 router = APIRouter()
 
 
-@router.post("/transfer")
+@router.post("/transfer", status_code=204)
 async def transfer(
     data: dict = Body(),
     sb: PaymentRepositoryI = Depends(get_payment_repository),
@@ -18,7 +18,7 @@ async def transfer(
     amount = data.get("event", {}).get("log", {}).get("invoice", {}).get("amount", None)
     fee = data.get("event", {}).get("log", {}).get("invoice", {}).get("fee", None)
     if amount is None or fee is None:
-        return 404
+        raise HTTPException(status_code=404, detail="Invoice not found")
 
     payment = PaymentProcessing(
         account=STARK_BANK_ACCOUNT,
@@ -27,5 +27,3 @@ async def transfer(
     )
 
     sb.transfer(payment=payment)
-
-    return 200

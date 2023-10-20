@@ -1,10 +1,13 @@
 from abc import ABC
+
+from fastapi import Depends
+from src.core.settings import Settings, get_settings
 from src.domains.payment_processing import PaymentProcessing
 import starkbank
 
 
 class PaymentRepositoryI(ABC):
-    def __init__(self, sb: starkbank):
+    def __init__(self, sb):
         self.sb = sb
 
     def transfer(self, payment: PaymentProcessing):
@@ -46,5 +49,15 @@ class PaymentRepositoryMock(PaymentRepositoryI):
         print(payment.account.account_type)
 
 
-def get_payment_repository() -> PaymentRepositoryI:
+def get_payment_repository(
+    settings: Settings = Depends(get_settings),
+) -> PaymentRepositoryI:
+    user = starkbank.Project(
+        environment=settings.SB_ENVIRONMENT,
+        id=settings.SB_PROJECT_ID,
+        private_key=settings.SB_PRIVATE_KEY,
+    )
+
+    starkbank.user = user
+
     return PaymentRepository(starkbank)

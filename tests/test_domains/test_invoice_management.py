@@ -26,7 +26,7 @@ def test_create_customer():
 def test_create_customer_without_tax_id():
     with pytest.raises(ValueError) as excinfo:
         Customer(
-            tax_id=None,
+            tax_id=None,  # type: ignore
             name="John Doe",
         )
         assert str(excinfo.value) == "tax_id is required"
@@ -51,7 +51,7 @@ def test_create_customar_with_invalid_name():
     with pytest.raises(ValueError) as excinfo:
         Customer(
             tax_id="123.456.789-09",
-            name=None,
+            name=None,  # type: ignore
         )
         assert str(excinfo.value) == "name is required"
 
@@ -65,7 +65,7 @@ def test_create_customar_with_invalid_name():
     with pytest.raises(ValueError) as excinfo:
         Customer(
             tax_id="123.456.789-09",
-            name=123,
+            name=123,  # type: ignore
         )
         assert str(excinfo.value) == "name must be a string"
 
@@ -88,7 +88,7 @@ def test_create_invoice(
 def test_create_invoice_without_customer():
     with pytest.raises(ValueError) as excinfo:
         Invoice(
-            customer=None,
+            customer=None,  # type: ignore
             amount=100,
         )
         assert str(excinfo.value) == "customer is required"
@@ -97,7 +97,7 @@ def test_create_invoice_without_customer():
 def test_create_invoice_with_invalid_customer():
     with pytest.raises(ValueError) as excinfo:
         Invoice(
-            customer="customer",
+            customer="customer",  # type: ignore
             amount=100,
         )
         assert str(excinfo.value) == "customer must be a Customer instance"
@@ -107,7 +107,7 @@ def test_create_invoice_with_invalid_amount():
     with pytest.raises(ValueError) as excinfo:
         Invoice(
             customer=Customer.random(),
-            amount=None,
+            amount=None,  # type: ignore
         )
         assert str(excinfo.value) == "amount is required"
 
@@ -124,7 +124,7 @@ def test_create_invoice_with_invalid_status():
         Invoice(
             customer=Customer.random(),
             amount=100,
-            status="status",
+            status="status",  # type: ignore
         )
         assert str(excinfo.value) == "status must be a InvoiceStatus instance"
 

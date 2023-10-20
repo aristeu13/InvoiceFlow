@@ -50,7 +50,7 @@ def test_payment_processing_with_errors(account: Account):
     assert "Fee must be greater than 0" in str(excinfo.value)
     with pytest.raises(TypeError) as excinfo:
         PaymentProcessing(
-            account="account",
+            account="account",  # type: ignore
             amount=100,
             fee=10,
         )
