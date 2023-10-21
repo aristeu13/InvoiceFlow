@@ -39,3 +39,5 @@ services:
       - BROKER_URL=amqp://guest:guest@rabbit:5672//
       - INVOICE_START_DATETIME=${INVOICE_START_DATETIME}
     command: celery -A src.work beat --loglevel=info
+    volumes:
+      - .:/app
